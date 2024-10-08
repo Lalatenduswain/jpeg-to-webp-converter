@@ -126,8 +126,3 @@ If you find this script useful and want to show your appreciation, you can donat
 
 This script is provided as-is and may require modifications or updates based on your specific environment and requirements. Use it at your own risk. The authors of the script are not liable for any damages or issues caused by its usage.
 ```
-
-### Key Changes:
-- **Title Update**: Changed from "JPEG to WebP Converter Script" to "Image to WebP Converter Script" to reflect support for multiple image formats.
-- **Usage Instructions**: Adjusted to mention conversion of various image formats.
-- **Script Explanation**: Updated the explanation sections to clarify that the script handles multiple image formats.
