@@ -1,14 +1,14 @@
-# JPEG to WebP Converter Script
+# Image to WebP Converter Script
 
-This Bash script converts JPEG images to WebP format using the `cwebp` tool. It's designed to be used in a Unix-like environment.
+This Bash script converts various image formats (JPEG, PNG, GIF) to WebP format using the `cwebp` tool. It's designed to be used in a Unix-like environment.
 
 ## Usage
 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/Lalatenduswain/jpeg-to-webp-converter.git
-    cd jpeg-to-webp-converter
+    git clone https://github.com/Lalatenduswain/image-to-webp-converter.git
+    cd image-to-webp-converter
     ```
 
 2. Make the script executable:
@@ -23,9 +23,10 @@ This Bash script converts JPEG images to WebP format using the `cwebp` tool. It'
     ./webp_converter.sh
     ```
 
-The script will check for the presence of the `cwebp` tool, install it if necessary, and then convert all JPEG images in the 'lala' folder to WebP format.
+The script will check for the presence of the `cwebp` tool, install it if necessary, and then convert all supported image files in the 'lala' folder to WebP format.
 
 ## More
+
 Certainly! Let's go through the script step by step to understand what each part does:
 
 ```bash
@@ -61,28 +62,30 @@ fi
 This block checks if the `cwebp` tool is installed. If not, it attempts to install it. The script checks for the package manager (`apt-get` for Debian/Ubuntu and `yum` for CentOS/RHEL) and installs the `webp` package accordingly.
 
 ```bash
-# Check if the 'lala' folder exists
-input_folder="lala"
+# Set the input folder path (create the 'lala' folder on the Desktop if it doesn't exist)
+input_folder="$HOME/Desktop/lala"
 if [ ! -d "$input_folder" ]; then
-    echo "Error: The '$input_folder' folder does not exist."
+    echo "The '$input_folder' folder does not exist. Creating it now..."
+    mkdir -p "$input_folder"
+    echo "'$input_folder' folder created. Please place the images in this folder and rerun the script."
     exit 1
 fi
 ```
 
-This section checks if the 'lala' folder exists. If not, it displays an error message and exits the script.
+This section checks if the 'lala' folder exists on the Desktop. If it does not exist, it creates the folder and prompts the user to place images inside it before exiting.
 
 ```bash
-# Get a list of all JPEG files in the 'lala' folder
-jpeg_files=$(find "$input_folder" -type f -name "*.jpg")
+# Get a list of all supported image files (JPEG, PNG, GIF) in the 'lala' folder
+image_files=$(find "$input_folder" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" \))
 
-# Check if there are JPEG files in the folder
-if [ -z "$jpeg_files" ]; then
-    echo "Error: No JPEG files found in the '$input_folder' folder."
+# Check if there are any image files in the folder
+if [ -z "$image_files" ]; then
+    echo "Error: No supported image files found in the '$input_folder' folder."
     exit 1
 fi
 ```
 
-Here, the script uses the `find` command to locate all JPEG files in the 'lala' folder. If no JPEG files are found, it displays an error message and exits.
+Here, the script uses the `find` command to locate all supported image files (JPEG, PNG, and GIF) in the 'lala' folder. If no files are found, it displays an error message and exits.
 
 ```bash
 # Create an 'output' folder to store the converted WebP images
@@ -93,27 +96,25 @@ mkdir -p "$output_folder"
 This section creates an 'output' folder named 'webp_output' within the 'lala' folder to store the converted WebP images.
 
 ```bash
-# Convert each JPEG file to WebP
-for jpeg_file in $jpeg_files; do
-    output_file="$output_folder/$(basename "${jpeg_file%.jpg}.webp")"
-    cwebp -q 80 "$jpeg_file" -o "$output_file"
+# Convert each image file to WebP
+for image_file in $image_files; do
+    output_file="$output_folder/$(basename "${image_file%.*}.webp")"
+    cwebp -q 80 "$image_file" -o "$output_file"
     if [ $? -eq 0 ]; then
         echo "Conversion successful: $output_file"
     else
-        echo "Error: Conversion failed for $jpeg_file."
+        echo "Error: Conversion failed for $image_file."
     fi
 done
 ```
 
-This loop iterates over each JPEG file found in the 'lala' folder. It uses the `cwebp` command to convert each JPEG file to WebP format with a quality of 80%. The converted WebP files are saved in the 'webp_output' folder.
+This loop iterates over each supported image file found in the 'lala' folder. It uses the `cwebp` command to convert each image file to WebP format with a quality of 80%. The converted WebP files are saved in the 'webp_output' folder.
 
 ```bash
-echo "All JPEG files in the '$input_folder' folder converted to WebP in the '$output_folder' folder."
+echo "All supported image files in the '$input_folder' folder converted to WebP in the '$output_folder' folder."
 ```
 
-Finally, the script prints a message indicating that all JPEG files in the 'lala' folder have been successfully converted to WebP format, and the converted files are stored in the 'webp_output' folder.
-
-In summary, the script checks for the presence of the `cwebp` tool, installs it if necessary, looks for JPEG files in the 'lala' folder, converts them to WebP format, and saves the converted files in a separate 'webp_output' folder within the 'lala' directory.
+Finally, the script prints a message indicating that all supported image files in the 'lala' folder have been successfully converted to WebP format, and the converted files are stored in the 'webp_output' folder.
 
 ## Donations
 
@@ -124,3 +125,9 @@ If you find this script useful and want to show your appreciation, you can donat
 **Author:** Lalatendu Swain | [GitHub](https://github.com/Lalatenduswain) | [Website](https://blog.lalatendu.info/)
 
 This script is provided as-is and may require modifications or updates based on your specific environment and requirements. Use it at your own risk. The authors of the script are not liable for any damages or issues caused by its usage.
+```
+
+### Key Changes:
+- **Title Update**: Changed from "JPEG to WebP Converter Script" to "Image to WebP Converter Script" to reflect support for multiple image formats.
+- **Usage Instructions**: Adjusted to mention conversion of various image formats.
+- **Script Explanation**: Updated the explanation sections to clarify that the script handles multiple image formats.
